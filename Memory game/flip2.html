@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Flip|Flap</title>
+  <link rel="stylesheet" type="text/css" href="flip2.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    ////intialized the game in an BIG object
+    var count=0;
+    var flip = {cards: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
+
+    init: function(){
+    flip.shuffle();////<------shuffle method is called after algo is made
+    },
+    ////
+    /////////////////////////shuffle method////////////////////////////////////////
+    shuffle: function() {
+    var random = 0;
+    var temp = 0;
+    for ( var i = 1; i < flip.cards.length; i++) {
+      random = Math.round(Math.random() * i);
+      temp = flip.cards[i];
+      flip.cards[i] = flip.cards[random];
+      flip.cards[random] = temp;
+    }
+    //////////////
+    flip.assignCards();//<--assign Cards method is called after the algo is made///
+    console.log('The Shuffled Array: ' + flip.cards);///prints the array and also the answers/////
+  },
+  ////
+  /////////////////algo to assigned card /////////////////
+  assignCards: function() {
+    $('.card').each(function(index) {
+      $(this).attr('data-card-value', flip.cards[index]);
+    });
+    flip.clickHandlers();///////<---clickHandlers method is assign
+  },
+  ////
+  /////////////////////algo for when clicked, it displays the value////////
+  clickHandlers: function() {
+    $('.card').on('click', function() {
+      $(this).html('<p>' + $(this).data('cardValue') + '</p>').addClass('selected');
+      flip.checkMatch();/////<---- method for when matched and is equal to true.
+    });
+  },
+  ////
+  /////////////////////algo for the cheking values of the cards and removing if matched
+  checkMatch: function() {
+    if ($('.selected').length === 2) {
+      if ($('.selected').first().data('cardValue') == $('.selected').last().data('cardValue')) {
+        $('.selected').each(function() {
+          $(this).animate({
+            opacity: 0
+          }).removeClass('unmatched');////////<-------this code here gave made me debug for 3 hours and it was a perid!!!
+        });
+        $('.selected').each(function() {
+          $(this).removeClass('selected');
+        });
+        flip.checkWin();//////////check if match method is called
+      }
+      /////////else if statement that when compared and is not true
+      else {
+        setTimeout(function() {
+          $('.selected').each(function() {
+            $(this).html('').removeClass('selected');
+          });
+        }, 800);
+      }
+    }
+  },
+
+  //////////////////<---method for when the cards are all gone///////
+  checkWin: function() {
+    if ( $('.unmatched').length === 0) {
+      $('#container').html('<h2 class="youWon">You Won!</h2>');
+      alert('Good job! if you want better memory, play this game more lol ');
+    }
+  }
+};
+flip.init();
+});
+  </script>
+</head>
+
+<body>
+  <h1 class="title">MEMORY GAME</h1>
+  <div id="container">
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+    <div class="card unmatched"></div>
+
+  </div>
+</body>
+
+</html>
